@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+
+scriptdir=$(dirname "$0")
+
+# digest if no Manifest file exists
+# v0.3 with bzr-support
+[ "x`type bzr &>/dev/null && echo yes`" == "xyes" ] && has_bzr="bzr add Manifest" || has_bzr=""
+
+smart="0"
+for i in `find -name '*.ebuild'|grep -v '.bzr'`;do
+	if [ ! "$smart" == "${i%/*}" ];then
+		smart="${i%/*}"
+		cd ${i%/*}
+		if [ ! -e "Manifest" ];then
+			pkz="`ls -t *.ebuild|head -n1`"
+			echo "ebuild ${pkz} manifest"
+			ebuild ${pkz} manifest
+			$has_bzr
+		fi
+		cd - &>/dev/null
+	else
+		echo -n
+	fi
+done
+
+# fifth small script
+# this script check for some vim tmp files and creates 00-PACKAGES-LIST
+
+# check for swp tmp files
+[ "x" != "x`find -iname '.*.ebuild.swp'`" ] && ( echo "INVALID FILES:" ;find -iname '.*.ebuild.swp' ;  exit 1 )
+
+# check Manifests
+for i in `find -iname 'Manifest'`; do
+	grep -i -e '.swp' -e '~' $i && echo "ERROR IN: $i"
+done
+
+# generate APPLICATIONS-LIST
+for i in `find -name Manifest`;do i=${i/\/Manifest/};echo ${i/.\//};done > PACKAGES
+
+${scriptdir}/make-categories > profiles/categories
+${scriptdir}/make-masks      > profiles/package.mask

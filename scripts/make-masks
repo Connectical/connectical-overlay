@@ -1,0 +1,33 @@
+#! /bin/bash
+
+if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" == "--help" ] ; then
+	cat 1>&2 <<EOF
+Usage: $0 [directory]
+
+This script calculates package masks for a given overlay and generate output
+suitable for use as a package.mask file. All ebuilds with version 9999 will
+be output for masking. If given, the directory is the path to the root of an
+overlay or the Portage tree, it is optional and if not given it will be
+assumed that the overlay is in the upper directory.
+EOF
+	exit 0
+fi
+
+if [ "$1" ] ; then
+	OVERLAY=$1
+else
+	OVERLAY="$(dirname $(dirname "$0"))"
+fi
+
+for ebuild in $(ls "${OVERLAY}"/*/*/*-9999.ebuild)
+do
+	# Strip leading characters
+	relpath=${ebuild##${OVERLAY}/}
+	# Guess category
+	category=${relpath%%/*}
+	# Strip category and get name only
+	package=${relpath##${category}/}
+	package=${package##*/}
+	echo "=${category}/${package%%.ebuild}"
+done
+

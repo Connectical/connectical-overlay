@@ -1,0 +1,27 @@
+#! /bin/bash
+
+if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" == "--help" ] ; then
+	cat 1>&2 <<EOF
+Usage: $0 [directory]
+
+This script calculates the categories for a given overlay and generates
+output suitable for use as a profiles/categories file.
+EOF
+	exit 0
+fi
+
+if [ "$1" ] ; then
+	OVERLAY=$1
+else
+	OVERLAY="$(dirname $(dirname "$0"))"
+fi
+
+for ebuild in $(ls "${OVERLAY}"/*/*/*.ebuild)
+do
+	# Strip leading characters
+	relpath=${ebuild##${OVERLAY}/}
+	# Guess category
+	category=${relpath%%/*}
+	echo "${category}"
+done | sort | uniq
+

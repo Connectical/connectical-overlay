@@ -1,0 +1,9 @@
+<layman>
+	<overlay type="rsync" name="connectical" contact="acastro@connectical.com"
+			src="rsync://foobar.homeunix.org/connectical">
+		<link>http://code.connectical.com/overlay</link>
+		<description>
+		    Contains ebuilds for packages developed at Connectical
+		</description>
+	</overlay>
+</layman>
