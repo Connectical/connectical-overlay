@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EBZR_SRC_URI="http://bazaar.launchpad.net/~acastro-connectical/cccp/main"
+EBZR_SRC_URI="bzr+http://code.connectical.com/${PN}/bzr/trunk"
 
 inherit distutils bazaar
 
 DESCRIPTION="Connectical Community Content Portal"
-HOMEPAGE="https://launchpad.net/cccp"
+HOMEPAGE="https://code.connectical.com/cccp"
 
 LICENSE="MIT"
 SLOT="0"
