@@ -1,4 +1,4 @@
-# Copyright 1999-2006 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -11,9 +11,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE=""
 
-RDEPEND=">=app-shells/bash-3.2_p17-r1
-		 >=net-misc/openssh-4.7_p1-r1
-		 >=sys-apps/util-linux-2.13-r2"
+RDEPEND=">=app-shells/bash-3.2
+		 >=net-misc/openssh-4.6
+		 >=sys-apps/util-linux-2.13"
 
 src_install() {
 	doman ${PN}.1

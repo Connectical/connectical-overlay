@@ -1,0 +1,7 @@
+# ChangeLog for app-crypt/ssh-keysend
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*ssh-keysend-1.0 (18 Mar 2008)
+
+  18 Mar 2008; Adrian Perez <acastro@connectical.com>: Initial import.

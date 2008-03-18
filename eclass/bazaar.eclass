@@ -31,7 +31,7 @@ EBZR_UPDATE_CMD="bzr pull"
 [ -z "${EBZR_BOOTSTRAP}" ] && EBZR_BOOTSTRAP=""
 
 
-function bazaar_bzr_fetch()
+bazaar_bzr_fetch()
 {
 	local ebzr_co_dir
 
@@ -86,7 +86,7 @@ function bazaar_bzr_fetch()
 }
 
 
-function bazaar_src_unpack()
+bazaar_src_unpack()
 {
 	bazaar_bzr_fetch || die "unknown problem in bazaar_bzr_fetch()"
 }
