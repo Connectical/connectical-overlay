@@ -1,0 +1,5 @@
+CONFIG_PROTECT="/etc/comida/mirrors /etc/comida/comida.conf /etc/comida/mirror_defaults.conf"
+
+# You can point COMIDA_HOME to where your config files reside.
+#
+# COMIDA_HOME="/etc/comida"
