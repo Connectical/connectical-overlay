@@ -1,2 +1,3 @@
+=app-misc/patata-9999
 =net-misc/comida-9999
 =www-apps/cccp-9999
