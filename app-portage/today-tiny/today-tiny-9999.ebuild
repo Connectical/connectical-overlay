@@ -2,9 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EBZR_SRC_URI="bzr+http://code.connectical.com/today/bzr/tiny"
+
+inherit bazaar
+
 DESCRIPTION="Automatic update tool for updating Gentoo boxen (tiny version)"
 HOMEPAGE="http://code.connectical.com/today"
-SRC_URI="http://www.connectical.com/distfiles/${PN}/${P}.tar.bz2"
+SRC_URI=""
 
 LICENSE="MIT"
 SLOT="0"
@@ -22,5 +26,7 @@ src_compile () {
 src_install () {
 	dodoc README AUTHORS
 	dosbin today-tiny
+	insinto /etc
+	doins etc/today-tiny.conf.example
 }
 
