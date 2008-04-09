@@ -16,5 +16,6 @@ IUSE=""
 
 DEPEND="dev-python/setuptools"
 RDEPEND="${DEPEND}
-	>=dev-python/paste-1.2"
+	>=dev-python/paste-1.2
+	>=dev-python/simpletal-4.1"
 
