@@ -1,7 +1,7 @@
 <layman>
-	<overlay type="rsync" name="connectical" contact="acastro@connectical.com"
-			src="rsync://rsync.connectical.com/overlay">
-		<link>http://code.connectical.com/overlay</link>
+	<overlay type="bzr" name="connectical" contact="acastro@connectical.com"
+		src="bzr+https://connectical.org/overlay/trunk">
+		<link>http://connectical.org/overlay</link>
 		<description>
 		    Contains ebuilds for packages developed at Connectical
 		</description>
