@@ -1,6 +1,7 @@
 app-crypt/ssh-keysend
-media-fonts/emeplus-fonts
-www-apps/cccp
-net-misc/comida
 app-misc/patata
 app-portage/today-tiny
+app-shells/dtools
+media-fonts/emeplus-fonts
+net-misc/comida
+www-apps/cccp
