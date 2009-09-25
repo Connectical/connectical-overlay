@@ -1,7 +1,7 @@
 <layman>
 	<overlay type="bzr" name="connectical" contact="aperez@connectical.com"
-		src="bzr+https://trac.connectical.com/overlay/trunk">
-		<link>https://connectical.org/projects/overlays</link>
+		src="bzr+http://bzr.connectical.com/overlay/trunk">
+		<link>https://connectical.org/projects/overlay</link>
 		<description>
 		    Contains ebuilds for packages developed at Connectical
 		</description>
