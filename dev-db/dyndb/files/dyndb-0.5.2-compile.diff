@@ -1,0 +1,20 @@
+--- dyndb-0.5.2.orig/package/compile	2001-08-18 07:44:44.000000000 +0200
++++ dyndb-0.5.2/package/compile	2009-03-09 21:05:03.691025903 +0100
+@@ -17,7 +17,7 @@
+ done
+ 
+ echo 'Compiling everything in ./compile...'
+-( cd compile; exec make )
++( cd compile; exec make -j1 )
+ 
+ echo 'Copying commands into ./command...'
+ for i in `cat package/commands`  ; do
+@@ -28,7 +28,7 @@
+ 
+ echo 'Copying documentation into ./doc...'
+ for i in `cat package/docs`  ; do
+-	( cd compile && make "$i" )
++	( cd compile && make -j1 "$i" )
+ 	rm -f doc/$i'{new}'
+ 	cp -p compile/$i doc/$i'{new}'
+ 	mv -f doc/$i'{new}' doc/$i

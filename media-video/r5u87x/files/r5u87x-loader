@@ -1,0 +1,6 @@
+#! /bin/bash
+#
+# Stupid wrapper script for the r587x firmware loader
+
+cd /usr/lib/r587x-loader
+exec ./loader "$@"

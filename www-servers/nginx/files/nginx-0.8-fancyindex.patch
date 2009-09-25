@@ -1,0 +1,20 @@
+commit 9e6893c0c8485e1e8c0094076e3afa173c259851
+Author: Adrián Pérez <aperez@furi-ku.org>
+Date:   Sat Jun 6 22:09:04 2009 +0200
+
+    Be compatible with Nginx 0.8.0
+
+diff --git a/ngx_http_fancyindex_module.c b/ngx_http_fancyindex_module.c
+index 6352af0..27ca130 100644
+--- a/ngx_http_fancyindex_module.c
++++ b/ngx_http_fancyindex_module.c
+@@ -382,7 +382,8 @@ make_content_buf(
+         entry->dir     = ngx_de_is_dir(&dir);
+         entry->mtime   = ngx_de_mtime(&dir);
+         entry->size    = ngx_de_size(&dir);
+-        entry->utf_len = (r->utf8)
++        entry->utf_len = (r->headers_out.charset.len == 5 &&
++                ngx_strncasecmp(r->headers_out.charset.data, (u_char*) "utf-8", 5) == 0)
+             ?  ngx_utf8_length(entry->name.data, entry->name.len)
+             : len;
+     }

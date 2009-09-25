@@ -1,0 +1,67 @@
+=== modified file 'src/metalog.c'
+--- src/metalog.c	2007-07-11 08:27:27 +0000
++++ src/metalog.c	2007-07-11 08:45:39 +0000
+@@ -428,6 +428,8 @@
+     }
+     chmod(sa.sun_path, 0666);
+     sockets[1] = -1;
++
++    if (do_kernel_log) {
+ #ifdef HAVE_KLOGCTL
+     /* larger buffers compared to a pipe() */
+     if(socketpair(AF_UNIX, SOCK_STREAM, 0, fdpipe) < 0) {
+@@ -489,6 +491,14 @@
+         sockets[1] = klogfd;
+     }
+ #endif
++    }
++    else {
++      /*
++       * This will avoid reading from the kernel socket in the process()
++       * function, which only takes into account valid descriptors.
++       */
++      sockets[1] = -1;
++    }
+ 
+     /* setup the signal handler pipe */
+     if (socketpair(AF_LOCAL, SOCK_STREAM, 0, dolog_queue) < 0) {
+@@ -1436,6 +1446,9 @@
+         case 'v' :
+             ++verbose;
+             break;
++        case 'N' :
++            do_kernel_log = 0;
++            break;
+         case 'V' :
+             puts(PACKAGE " version " VERSION);
+             exit(EXIT_SUCCESS);
+
+=== modified file 'src/metalog_p.h'
+--- src/metalog_p.h	2007-07-11 08:27:27 +0000
++++ src/metalog_p.h	2007-07-11 08:42:36 +0000
+@@ -6,7 +6,7 @@
+ #else
+ # define KLOGCTL_OPTIONS ""
+ #endif
+-#define GETOPT_OPTIONS KLOGCTL_OPTIONS "aBC:hp:sVv"
++#define GETOPT_OPTIONS KLOGCTL_OPTIONS "aBC:hp:sVvN"
+ 
+ static struct option long_options[] = {
+     { "async",        0, NULL, 'a' },
+@@ -16,6 +16,7 @@
+ #endif
+     { "configfile",   1, NULL, 'C' },
+     { "pidfile",      1, NULL, 'p' },
++    { "no-kernel",    0, NULL, 'N' },
+     { "synchronous",  0, NULL, 's' },
+     { "sync",         0, NULL, 's' },
+     { "verbose",      0, NULL, 'v' },
+@@ -36,6 +37,7 @@
+ static pid_t child;
+ static sig_atomic_t synchronous = (sig_atomic_t) 1;
+ static int verbose;
++static int do_kernel_log = 1;
+ static signed char daemonize;
+ static const char *pid_file = DEFAULT_PID_FILE;
+ static const char *config_file = DEFAULT_CONFIG_FILE;
+

@@ -1,0 +1,13 @@
+# ChangeLog for sci-physics/phun
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  02 May 2008; Adrián Pérez <acastro@connectical.com>: Updated ebuild to
+  follow latest (unreleases) release of the Gentoo Science team.
+
+*phun-3.5 (02 May 2008)
+
+*phun-0.1_beta3-r12 (20 Mar 2008)
+
+  19 Mar 2008; Adrián Pérez <acastro@connectical.com>: Initial import.
+

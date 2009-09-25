@@ -1,0 +1,12 @@
+--- dyndb-0.5.2.orig/src/error.h	2001-08-12 12:44:24.000000000 +0200
++++ dyndb-0.5.2/src/error.h	2009-03-09 20:04:28.359803569 +0100
+@@ -7,7 +7,8 @@
+ 
+ #ifndef ERROR_H
+ #define ERROR_H
+-extern int errno;
++#include <errno.h>
++/*extern int errno;*/
+ extern const char *error_str(int);
+ extern int error_temp(int);
+ 

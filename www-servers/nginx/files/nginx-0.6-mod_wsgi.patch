@@ -1,0 +1,44 @@
+diff -r 8994b058d2db examples/nginx.conf
+--- a/examples/nginx.conf	Wed Mar 26 20:35:15 2008 +0100
++++ b/examples/nginx.conf	Fri May 02 01:37:33 2008 +0200
+@@ -14,7 +14,7 @@
+ env PYTHONPATH=/some/path;
+ 
+ http {
+-    include       conf/mime.types;
++    include       mime.types;
+     default_type  application/octet-stream;
+ 
+     #log_format  main  '$remote_addr - $remote_user [$time_local] $request '
+@@ -31,8 +31,8 @@
+ 
+     gzip  off;
+     #ssl on;
+-    #ssl_certificate      conf/server.crt;
+-    #ssl_certificate_key  conf/server.key;
++    #ssl_certificate      server.crt;
++    #ssl_certificate_key  server.key;
+ 
+     wsgi_python_optimize 0;
+     #wsgi_python_executable /usr/bin/python;
+@@ -44,7 +44,7 @@
+         server_name  localhost;
+ 
+ 
+-        include conf/wsgi_vars;
++        include wsgi_vars;
+ 
+         #wsgi_middleware  wsgiref.validate  validator;
+         #wsgi_middleware  paste.lint;
+diff -r 8994b058d2db src/ngx_http_wsgi_handler.c
+--- a/src/ngx_http_wsgi_handler.c	Wed Mar 26 20:35:15 2008 +0100
++++ b/src/ngx_http_wsgi_handler.c	Fri May 02 01:37:33 2008 +0200
+@@ -71,7 +71,7 @@
+ 
+   if (r->method == NGX_HTTP_GET || r->method == NGX_HTTP_HEAD) {
+     /* XXX not sure */
+-    rc = ngx_http_discard_body(r);
++    rc = ngx_http_discard_request_body(r);
+ 
+     if (rc != NGX_OK && rc != NGX_AGAIN) {
+       return rc;

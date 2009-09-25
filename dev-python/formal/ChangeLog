@@ -1,0 +1,14 @@
+# ChangeLog for dev-python/formal
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*formal-9999 (15 Aug 2006)
+
+  15 Aug 2006; Adrian Perez <acastro@connectical.com>:
+  Fixed installation of non-Python stuff (.css, .js, .html).
+
+*formal-0.1_beta20060705 (07 May 2006)
+
+  08 May 2006; Adrian Perez <acastro@connectical.com>:
+  Initial import.
+

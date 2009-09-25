@@ -1,0 +1,15 @@
+--- /tmp/collectd-4.7.0/src/utils_cache.c	2009-05-12 08:58:42.000000000 +0200
++++ src/utils_cache.c	2009-05-22 12:48:12.230047604 +0200
+@@ -281,6 +281,12 @@
+   {
+     int status;
+ 
++    if (c_avl_get (cache_tree, keys[i], (void *) &ce) != 0 )
++    {
++      DEBUG ("uc_check_timeout: cannot get data for %s in cache", keys[i]);
++      continue;
++    }
++
+     status = ut_check_interesting (keys[i]);
+ 
+     if (status < 0)

@@ -1,0 +1,8 @@
+# ChangeLog for app-vim/nginx-syntax
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*nginx-syntax-1 (19 Mar 2008)
+
+  19 Mar 2008; Adrián Pérez <acastro@connectical.com>: Initial import.
+

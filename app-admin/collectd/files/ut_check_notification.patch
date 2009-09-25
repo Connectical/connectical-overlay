@@ -1,0 +1,10 @@
+--- a/src/plugin.c	2009-03-18 11:55:39.000000000 +0100
++++ b/plugin.c	2009-05-04 12:41:06.000000000 +0200
+@@ -959,6 +959,7 @@
+ 
+ 	/* Update the value cache */
+ 	uc_update (ds, vl);
++	ut_check_threshold (ds, vl);
+ 
+ 	if (post_cache_chain != NULL)
+ 	{

@@ -1,0 +1,2 @@
+# Path to mathopd configuration file
+MATHOPD_CONF="/etc/mathopd/mathopd.conf"
