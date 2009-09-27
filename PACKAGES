@@ -13,6 +13,7 @@ app-text/rest2web
 app-text/rst2pdf
 dev-db/dyndb
 dev-db/sqlite
+dev-db/tokyocabinet
 dev-games/scummc
 dev-python/eventlet
 dev-python/formal

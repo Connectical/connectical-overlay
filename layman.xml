@@ -3,7 +3,8 @@
 		src="bzr+http://bzr.connectical.com/overlay/trunk">
 		<link>https://connectical.org/projects/overlay</link>
 		<description>
-		    Contains ebuilds for packages developed at Connectical
+		    Contains ebuilds for packages developed at Connectical and third
+		    party ebuilds too.
 		</description>
 	</overlay>
 </layman>
