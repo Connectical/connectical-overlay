@@ -9,7 +9,7 @@ DESCRIPTION="Robust, small and high performance http and reverse proxy server"
 FANCYINDEX="ngx-fancyindex-0.2"
 WSGI="mod_wsgi-8994b058d2db"
 SCGI="mod_scgi-b466baa5fcdb"
-PAM="ngx_http_auth_pam_module-1.0"
+PAM="ngx_http_auth_pam_module-1.1"
 
 HOMEPAGE="http://nginx.net/"
 SRC_URI="http://sysoev.ru/nginx/${P}.tar.gz
