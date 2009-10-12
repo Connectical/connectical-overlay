@@ -2,7 +2,6 @@ app-admin
 app-crypt
 app-laptop
 app-misc
-app-misc.moved
 app-office
 app-portage
 app-shells
@@ -15,6 +14,7 @@ gnome-extra
 mail-client
 media-fonts
 media-gfx
+media-libs
 media-sound
 media-video
 net-analyzer
@@ -22,11 +22,9 @@ net-libs
 net-mail
 net-misc
 net-wireless
-sci-physics
 sys-fs
 sys-process
 www-apps
-www-apps.moved
 www-servers
 x11-misc
 x11-terms

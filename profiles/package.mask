@@ -1,4 +1,9 @@
 =app-misc/patata-9999
 =app-portage/today-tiny-9999
+=dev-python/formal-9999
+=dev-python/pydoctor-9999
+=dev-python/pywebkitgtk-9999
+=media-sound/listen-9999
 =net-misc/comida-9999
 =www-apps/cccp-9999
+=x11-misc/cairo-compmgr-9999
