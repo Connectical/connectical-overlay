@@ -19,7 +19,7 @@ start()
     ebegin "Starting collectd"
     start-stop-daemon --start --pidfile ${COLLECTD_PIDFILE} \
 	--nice ${COLLECTD_NICE} --exec /usr/sbin/collectdmon \
-	-P ${COLLECTD_PIDFILE} -- -C ${COLLECTD_CONFIG}
+	-- -P ${COLLECTD_PIDFILE} -- -C ${COLLECTD_CONFIG}
     eend $? "Failed to start collectd"
 }
 
