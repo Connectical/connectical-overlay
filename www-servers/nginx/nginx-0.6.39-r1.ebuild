@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -34,7 +34,6 @@ pkg_setup() {
 	eend ${?}
 }
 
-
 src_unpack () {
 	unpack ${A}
 	cd "${S}"
@@ -44,7 +43,6 @@ src_unpack () {
 		epatch "${FILESDIR}/nginx-0.6-mod_wsgi.patch"
 	fi
 }
-
 
 src_compile() {
 	local myconf

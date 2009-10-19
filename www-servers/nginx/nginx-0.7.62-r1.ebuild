@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-servers/nginx/nginx-0.7.1.ebuild,v 1.1 2008/05/27 13:41:06 voxus Exp $
 
@@ -16,7 +16,7 @@ SRC_URI="http://sysoev.ru/nginx/${P}.tar.gz
 	fancyindex? ( http://files.connectical.com/gentoo/${FANCYINDEX}.tar.bz2 )
 	python? ( http://files.connectical.com/gentoo/${WSGI}.tar.gz )
 	scgi? ( http://files.connectical.com/gentoo/${SCGI}.tar.gz )
-    pam? ( http://web.iti.upv.es/~sto/nginx/${PAM}.tar.gz )"
+	pam? ( http://web.iti.upv.es/~sto/nginx/${PAM}.tar.gz )"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 ppc x86"
@@ -39,7 +39,6 @@ pkg_setup() {
 	eend ${?}
 }
 
-
 src_unpack () {
 	unpack ${A}
 	cd "${S}"
@@ -50,7 +49,6 @@ src_unpack () {
 		epatch "${FILESDIR}/nginx-0.6-mod_wsgi.patch"
 	fi
 }
-
 
 src_compile() {
 	local myconf
@@ -117,7 +115,7 @@ src_install() {
 	insinto "${ROOT}"/etc/${PN}
 	doins conf/*
 
-	dodoc CHANGES{,.ru} LICENSE README
+	dodoc CHANGES{,.ru} README
 
 	use perl && {
 		cd "${S}"/objs/src/http/modules/perl/

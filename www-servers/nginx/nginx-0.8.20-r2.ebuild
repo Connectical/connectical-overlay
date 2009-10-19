@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-servers/nginx/nginx-0.7.1.ebuild,v 1.1 2008/05/27 13:41:06 voxus Exp $
 
@@ -7,6 +7,7 @@ inherit eutils ssl-cert
 DESCRIPTION="Robust, small and high performance http and reverse proxy server"
 
 FANCYINDEX="ngx-fancyindex-0.2"
+PUSH="nginx_http_push_module"
 WSGI="mod_wsgi-8994b058d2db"
 SCGI="mod_scgi-b466baa5fcdb"
 PAM="ngx_http_auth_pam_module-1.1"
@@ -15,14 +16,15 @@ HOMEPAGE="http://nginx.net/"
 SRC_URI="http://sysoev.ru/nginx/${P}.tar.gz
 	fancyindex? ( http://files.connectical.com/gentoo/${FANCYINDEX}.tar.bz2 )
 	python? ( http://files.connectical.com/gentoo/${WSGI}.tar.gz )
+	push? ( http://cloud.github.com/downloads/slact/nginx_http_push_module/${PUSH}-0.3.2.tar.gz )
 	scgi? ( http://files.connectical.com/gentoo/${SCGI}.tar.gz )
-    pam? ( http://web.iti.upv.es/~sto/nginx/${PAM}.tar.gz )"
+	pam? ( http://web.iti.upv.es/~sto/nginx/${PAM}.tar.gz )"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 
 IUSE="addition debug fastcgi flv imap pcre perl ssl status sub webdav zlib
-	fancyindex python scgi gzip-static googleperf pam ipv6 xslt"
+	fancyindex python scgi gzip-static googleperf pam ipv6 xslt push"
 
 DEPEND="dev-lang/perl
 	pcre? ( >=dev-libs/libpcre-4.2 )
@@ -40,7 +42,6 @@ pkg_setup() {
 	eend ${?}
 }
 
-
 src_unpack () {
 	unpack ${A}
 	cd "${S}"
@@ -56,7 +57,6 @@ src_unpack () {
 		epatch "${FILESDIR}/nginx-0.8-fancyindex.patch"
 	fi
 }
-
 
 src_compile() {
 	local myconf
@@ -98,6 +98,7 @@ src_compile() {
 	use gzip-static && myconf="${myconf} --with-http_gzip_static_module"
 	use fancyindex  && myconf="${myconf} --add-module=../${FANCYINDEX}"
 	use python      && myconf="${myconf} --add-module=../${WSGI}"
+	use push        && myconf="${myconf} --add-module=../${PUSH}"
 	use scgi        && myconf="${myconf} --add-module=../${SCGI}"
 	use pam         && myconf="${myconf} --add-module=../${PAM}"
 
@@ -130,7 +131,7 @@ src_install() {
 	insinto "${ROOT}"/etc/${PN}
 	doins conf/*
 
-	dodoc CHANGES{,.ru} LICENSE README
+	dodoc CHANGES{,.ru} README
 
 	use perl && {
 		cd "${S}"/objs/src/http/modules/perl/
@@ -157,6 +158,10 @@ src_install() {
 		doins conf/wsgi_vars
 
 		dosbin bin/*
+	fi
+	if use push ; then
+		cd "${WORKDIR}/${PUSH}"
+		cp README   README.push  && dodoc README.push
 	fi
 	if use scgi ; then
 	  	cd "${WORKDIR}/${SCGI}"
