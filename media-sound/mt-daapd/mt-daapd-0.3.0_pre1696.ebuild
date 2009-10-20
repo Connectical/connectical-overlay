@@ -9,7 +9,7 @@ SVN="${PV#*pre}"
 
 if [[ -n ${SVN} ]] ; then
 	MY_P="${PN}-svn-${SVN}"
-	SRC_URI="http://nightlies.mt-daapd.org/${MY_P}.tar.gz"
+	SRC_URI="http://nightlies.fireflymediaserver.org/nightlies/svn-${SVN}/${MY_P}.tar.gz"
 else
 	MY_P="${P/_/-}"
 	SRC_URI="mirror://sourceforge/${PN}/${MY_P}.tar.gz"
