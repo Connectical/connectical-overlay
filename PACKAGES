@@ -22,7 +22,6 @@ www-servers/spawning
 www-servers/nginx
 sys-process/rotlog
 media-gfx/jessyink
-app-admin/metalog
 app-admin/collectd
 app-misc/patata
 app-misc/referencer
