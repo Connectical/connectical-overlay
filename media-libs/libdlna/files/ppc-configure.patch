@@ -1,0 +1,11 @@
+--- configure.orig	2009-10-28 11:48:03.000000000 +0100
++++ configure	2009-10-28 11:48:17.000000000 +0100
+@@ -489,7 +489,7 @@
+ 
+ # AltiVec flags: The FSF version of GCC differs from the Apple version
+ if test $cpu = "powerpc"; then
+-  if test $altivec = "yes"; then
++  if test x$altivec = xyes; then
+     if test -n "`$cc -v 2>&1 | grep version | grep Apple`"; then
+       add_cflags "-faltivec"
+     else
