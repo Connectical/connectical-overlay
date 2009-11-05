@@ -16,6 +16,7 @@ x11-terms/guake
 x11-terms/qcon
 x11-terms/yeahconsole
 sys-fs/ms-sys
+net-misc/ushare
 net-misc/comida
 www-servers/mathopd
 www-servers/spawning
@@ -25,7 +26,9 @@ media-gfx/jessyink
 app-admin/collectd
 app-misc/patata
 app-misc/referencer
+media-libs/spulibs
 media-libs/libmad
+media-libs/libdlna
 media-fonts/emeplus-fonts
 media-video/r5u870
 media-video/r5u87x
@@ -33,6 +36,7 @@ app-office/billreminder
 dev-python/pydoctor
 dev-python/formal
 dev-python/greenlet
+dev-python/pygobject
 dev-python/python-musicbrainz2
 dev-python/eventlet
 dev-python/pywebkitgtk

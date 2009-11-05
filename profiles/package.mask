@@ -2,6 +2,7 @@
 =app-portage/today-tiny-9999
 =dev-python/formal-9999
 =dev-python/pydoctor-9999
+=dev-python/pygobject-9999
 =dev-python/pywebkitgtk-9999
 =media-sound/listen-9999
 =net-misc/comida-9999
