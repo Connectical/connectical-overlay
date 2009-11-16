@@ -7,6 +7,7 @@ inherit eutils ssl-cert
 DESCRIPTION="Robust, small and high performance http and reverse proxy server"
 
 FANCYINDEX="ngx-fancyindex-0.2"
+CHUNKIN="agentzh-chunkin-nginx-module-495af8c"
 PUSH="nginx_http_push_module"
 WSGI="mod_wsgi-8994b058d2db"
 SCGI="mod_scgi-b466baa5fcdb"
@@ -15,6 +16,7 @@ PAM="ngx_http_auth_pam_module-1.1"
 HOMEPAGE="http://nginx.net/"
 SRC_URI="http://sysoev.ru/nginx/${P}.tar.gz
 	fancyindex? ( http://files.connectical.com/gentoo/${FANCYINDEX}.tar.bz2 )
+	chunkin? ( http://download.github.com/${CHUNKIN}.tar.gz )
 	python? ( http://files.connectical.com/gentoo/${WSGI}.tar.gz )
 	push? ( http://cloud.github.com/downloads/slact/nginx_http_push_module/${PUSH}-0.3.2.tar.gz )
 	scgi? ( http://files.connectical.com/gentoo/${SCGI}.tar.gz )
@@ -24,7 +26,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 
 IUSE="addition debug fastcgi flv imap pcre perl ssl status sub webdav zlib
-	fancyindex python scgi gzip-static googleperf pam ipv6 xslt push"
+	fancyindex python scgi gzip-static googleperf pam ipv6 xslt push chunkin"
 
 DEPEND="dev-lang/perl
 	pcre? ( >=dev-libs/libpcre-4.2 )
@@ -97,6 +99,7 @@ src_compile() {
 	use googleperf  && myconf="${myconf} --with-google_perftools_module"
 	use gzip-static && myconf="${myconf} --with-http_gzip_static_module"
 	use fancyindex  && myconf="${myconf} --add-module=../${FANCYINDEX}"
+	use chunkin     && myconf="${myconf} --add-module=../${CHUNKIN}"
 	use python      && myconf="${myconf} --add-module=../${WSGI}"
 	use push        && myconf="${myconf} --add-module=../${PUSH}"
 	use scgi        && myconf="${myconf} --add-module=../${SCGI}"
