@@ -2,8 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+I_KNOW_WHAT_I_AM_DOING=1
+
 inherit eutils
-inherit kernel-mod
+inherit linux-info
 inherit java-pkg-opt-2
 
 DESCRIPTION="A small daemon to collect system statistics into RRD files."
@@ -71,13 +73,15 @@ src_compile() {
 	fi
 
 	if use ipvs ; then
-		kernel-mod_configoption_present CONFIG_IP_VS || \
+		require_configured_kernel
+		linux_chkconfig_present IP_VS || \
 		die $"kernel do not support IP virtual server," \
 			$"required for ipvs plugin"
 	fi
 
 	if use conntrack ; then
-		kernel-mod_configoption_present CONFIG_NF_CONNTRACK || \
+		require_configured_kernel
+		linux_chkconfig_present NF_CONNTRACK || \
 		die $"kernel do not support Netfilter Conntrack," \
 			$"required for conntrack plugin"
 	fi
