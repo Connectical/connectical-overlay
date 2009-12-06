@@ -2,8 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+I_KNOW_WHAT_I_AM_DOING=1
+
 inherit eutils
-inherit kernel-mod
+inherit linux-info
 
 DESCRIPTION="A small daemon to collect system statistics into RRD files."
 HOMEPAGE="http://collectd.org/"
@@ -59,7 +61,7 @@ src_compile() {
 	fi
 
 	if use ipvs ; then
-		kernel-mod_configoption_present CONFIG_IP_VS || \
+		linux_chkconfig_present IP_VS || \
 		die $"kernel do not support IP virtual server," \
 			$"required for ipvs plugin"
 	fi
