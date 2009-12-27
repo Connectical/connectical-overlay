@@ -23,10 +23,10 @@ SRC_URI="http://sysoev.ru/nginx/${P}.tar.gz
 	pam? ( http://web.iti.upv.es/~sto/nginx/${PAM}.tar.gz )"
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86"
+KEYWORDS="~amd64 ~ppc ~x86 ~x86-fbsd"
 
-IUSE="addition debug fastcgi flv imap pcre perl ssl status sub webdav zlib
-	fancyindex python scgi gzip-static googleperf pam ipv6 xslt push chunkin"
+IUSE="addition debug fastcgi flv imap ipv6 pcre perl random-index securelink ssl status sub webdav zlib
+	fancyindex python scgi gzip-static googleperf pam xslt push chunkin"
 
 DEPEND="dev-lang/perl
 	pcre? ( >=dev-libs/libpcre-4.2 )
@@ -39,12 +39,17 @@ DEPEND="dev-lang/perl
 
 pkg_setup() {
 	ebegin "Creating nginx user and group"
-	enewgroup nginx
-	enewuser nginx -1 -1 /dev/null nginx
+	enewgroup ${PN}
+	enewuser ${PN} -1 -1 -1 ${PN}
 	eend ${?}
+	if use ipv6; then
+		ewarn "Note that ipv6 support in nginx is still experimental."
+		ewarn "Be sure to read comments on gentoo bug #274614"
+		ewarn "http://bugs.gentoo.org/show_bug.cgi?id=274614"
+	fi
 }
 
-src_unpack () {
+src_unpack() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}/use_x_forwarded_host.patch"
@@ -58,6 +63,7 @@ src_unpack () {
 		cd "${WORKDIR}/${FANCYINDEX}"
 		epatch "${FILESDIR}/nginx-0.8-fancyindex.patch"
 	fi
+	sed -i 's/ make/ \\$(MAKE)/' "${S}"/auto/lib/perl/make || die
 }
 
 src_compile() {
@@ -75,10 +81,9 @@ src_compile() {
 
 	# Some things are enabled unconditionally
 	myconf="${myconf} --with-http_realip_module"
-	myconf="${myconf} --with-http_random_index_module"
-	myconf="${myconf} --with-http_secure_link_module"
 
 	use addition && myconf="${myconf} --with-http_addition_module"
+	use ipv6	&& myconf="${myconf} --with-ipv6"
 	use fastcgi	|| myconf="${myconf} --without-http_fastcgi_module"
 	use fastcgi	&& myconf="${myconf} --with-http_realip_module"
 	use flv		&& myconf="${myconf} --with-http_flv_module"
@@ -87,13 +92,14 @@ src_compile() {
 		myconf="${myconf} --without-pcre --without-http_rewrite_module"
 	}
 	use debug	&& myconf="${myconf} --with-debug"
-	use ipv6    && myconf="${myconf} --with-ipv6"
 	use ssl		&& myconf="${myconf} --with-http_ssl_module"
 	use imap	&& myconf="${myconf} --with-imap" # pop3/imap4 proxy support
 	use perl	&& myconf="${myconf} --with-http_perl_module"
 	use status	&& myconf="${myconf} --with-http_stub_status_module"
 	use webdav	&& myconf="${myconf} --with-http_dav_module"
 	use sub		&& myconf="${myconf} --with-http_sub_module"
+	use random-index	&& myconf="${myconf} --with-http_random_index_module"
+	use securelink && myconf="${myconf} --with-http_secure_link_module"
 	use xslt    && myconf="${myconf} --with-http_xslt_module"
 
 	use googleperf  && myconf="${myconf} --with-google_perftools_module"
@@ -105,6 +111,7 @@ src_compile() {
 	use scgi        && myconf="${myconf} --add-module=../${SCGI}"
 	use pam         && myconf="${myconf} --add-module=../${PAM}"
 
+	tc-export CC
 	./configure \
 		--prefix=/usr \
 		--conf-path=/etc/${PN}/${PN}.conf \
@@ -118,7 +125,7 @@ src_compile() {
 		--with-sha1-asm --with-sha1=/usr/include \
 		${myconf} || die "configure failed"
 
-	emake || die "failed to compile"
+	emake LINK="${CC} ${LDFLAGS}" OTHERLDFLAGS="${LDFLAGS}" || die "failed to compile"
 }
 
 src_install() {
@@ -130,8 +137,8 @@ src_install() {
 
 	cp "${FILESDIR}"/nginx.conf-r4 conf/nginx.conf
 
-	dodir "${ROOT}"/etc/${PN}
-	insinto "${ROOT}"/etc/${PN}
+	dodir /etc/${PN}
+	insinto /etc/${PN}
 	doins conf/*
 
 	dodoc CHANGES{,.ru} README
@@ -185,10 +192,8 @@ src_install() {
 pkg_postinst() {
 	use ssl && {
 		if [ ! -f "${ROOT}"/etc/ssl/${PN}/${PN}.key ]; then
-			dodir "${ROOT}"/etc/ssl/${PN}
-			insinto "${ROOT}"etc/ssl/${PN}/
-			insopts -m0644 -o nginx -g nginx
-			install_cert /etc/ssl/nginx/nginx
+			install_cert /etc/ssl/${PN}/${PN}
+			chown ${PN}:${PN} "${ROOT}"/etc/ssl/${PN}/${PN}.{crt,csr,key,pem}
 		fi
 	}
 }
