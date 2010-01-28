@@ -1,8 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-servers/nginx/nginx-0.7.1.ebuild,v 1.1 2008/05/27 13:41:06 voxus Exp $
+# $Header: $
 
-inherit eutils ssl-cert
+inherit eutils ssl-cert toolchain-funcs perl-module
 
 DESCRIPTION="Robust, small and high performance http and reverse proxy server"
 
@@ -25,15 +25,15 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86 ~x86-fbsd"
 
-IUSE="addition debug fastcgi flv imap ipv6 pcre perl random-index securelink ssl status sub webdav zlib
-	fancyindex python scgi gzip-static googleperf pam xslt push chunkin"
+IUSE="addition aio debug fastcgi flv imap ipv6 pcre perl pop random-index realip securelink smtp ssl static-gzip status sub webdav zlib
+	fancyindex python scgi googleperf pam xslt push chunkin"
 
 DEPEND="dev-lang/perl
+	dev-libs/openssl
 	pcre? ( >=dev-libs/libpcre-4.2 )
-	ssl? ( dev-libs/openssl )
 	zlib? ( sys-libs/zlib )
-	xslt? ( dev-libs/libxslt )
 	perl? ( >=dev-lang/perl-5.8 )
+	xslt? ( dev-libs/libxslt )
 	python? ( >=dev-lang/python-2.4 )
 	pam? ( virtual/pam )"
 
@@ -83,6 +83,7 @@ src_compile() {
 	myconf="${myconf} --with-http_realip_module"
 
 	use addition && myconf="${myconf} --with-http_addition_module"
+	use aio		&& myconf="${myconf} --with-file-aio"
 	use ipv6	&& myconf="${myconf} --with-ipv6"
 	use fastcgi	|| myconf="${myconf} --without-http_fastcgi_module"
 	use fastcgi	&& myconf="${myconf} --with-http_realip_module"
@@ -93,17 +94,25 @@ src_compile() {
 	}
 	use debug	&& myconf="${myconf} --with-debug"
 	use ssl		&& myconf="${myconf} --with-http_ssl_module"
-	use imap	&& myconf="${myconf} --with-imap" # pop3/imap4 proxy support
 	use perl	&& myconf="${myconf} --with-http_perl_module"
 	use status	&& myconf="${myconf} --with-http_stub_status_module"
 	use webdav	&& myconf="${myconf} --with-http_dav_module"
 	use sub		&& myconf="${myconf} --with-http_sub_module"
+	use realip	&& myconf="${myconf} --with-http_realip_module"
+	use static-gzip		&& myconf="${myconf} --with-http_gzip_static_module"
 	use random-index	&& myconf="${myconf} --with-http_random_index_module"
-	use securelink && myconf="${myconf} --with-http_secure_link_module"
+	use securelink		&& myconf="${myconf} --with-http_secure_link_module"
 	use xslt    && myconf="${myconf} --with-http_xslt_module"
 
+	if use smtp || use pop || use imap; then
+		myconf="${myconf} --with-mail"
+		use ssl && myconf="${myconf} --with-mail_ssl_module"
+	fi
+	use imap || myconf="${myconf} --without-mail_imap_module"
+	use pop || myconf="${myconf} --without-mail_pop3_module"
+	use smtp || myconf="${myconf} --without-mail_smtp_module"
+
 	use googleperf  && myconf="${myconf} --with-google_perftools_module"
-	use gzip-static && myconf="${myconf} --with-http_gzip_static_module"
 	use fancyindex  && myconf="${myconf} --add-module=../${FANCYINDEX}"
 	use chunkin     && myconf="${myconf} --add-module=../${CHUNKIN}"
 	use python      && myconf="${myconf} --add-module=../${WSGI}"
@@ -114,6 +123,8 @@ src_compile() {
 	tc-export CC
 	./configure \
 		--prefix=/usr \
+		--with-cc-opt="-I${ROOT}/usr/include" \
+		--with-ld-opt="-L${ROOT}/usr/lib" \
 		--conf-path=/etc/${PN}/${PN}.conf \
 		--http-log-path=/var/log/${PN}/access_log \
 		--error-log-path=/var/log/${PN}/error_log \
@@ -121,8 +132,6 @@ src_compile() {
 		--http-client-body-temp-path=/var/tmp/${PN}/client \
 		--http-proxy-temp-path=/var/tmp/${PN}/proxy \
 		--http-fastcgi-temp-path=/var/tmp/${PN}/fastcgi \
-		--with-md5-asm --with-md5=/usr/include \
-		--with-sha1-asm --with-sha1=/usr/include \
 		${myconf} || die "configure failed"
 
 	emake LINK="${CC} ${LDFLAGS}" OTHERLDFLAGS="${LDFLAGS}" || die "failed to compile"
@@ -132,8 +141,7 @@ src_install() {
 	keepdir /var/log/${PN} /var/tmp/${PN}/{client,proxy,fastcgi}
 
 	dosbin objs/nginx
-	cp "${FILESDIR}"/nginx-r1 "${T}"/nginx
-	doinitd "${T}"/nginx
+	newinitd "${FILESDIR}"/nginx.init-r2 nginx || die
 
 	cp "${FILESDIR}"/nginx.conf-r4 conf/nginx.conf
 
@@ -143,9 +151,14 @@ src_install() {
 
 	dodoc CHANGES{,.ru} README
 
+	# logrotate
+	insinto /etc/logrotate.d
+	newins "${FILESDIR}"/nginx.logrotate nginx || die
+
 	use perl && {
 		cd "${S}"/objs/src/http/modules/perl/
-		einstall DESTDIR="${D}"|| die "failed to install perl stuff"
+		einstall DESTDIR="${D}" INSTALLDIRS=vendor || die "failed to install perl stuff"
+		fixlocalpod
 	}
 
 	if use fancyindex ; then
@@ -183,9 +196,9 @@ src_install() {
 	fi
 	if use pam ; then
 		cd "${WORKDIR}/${PAM}"
-		cp LICENSE  LICENSE.pam && dodoc LICENSE.pam
-		cp README   README.pam  && dodoc README.pam
-		cp ChangLog NEWS.pam    && dodoc NEWS.pam
+		cp LICENSE   LICENSE.pam && dodoc LICENSE.pam
+		cp README    README.pam  && dodoc README.pam
+		cp ChangeLog NEWS.pam    && dodoc NEWS.pam
 	fi
 }
 
