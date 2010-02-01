@@ -52,3 +52,4 @@ app-text/rst2pdf
 app-text/odtwriter
 app-text/rest2web
 app-text/itex2mml
+sys-auth/libnss-map
