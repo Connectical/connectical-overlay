@@ -1,5 +1,5 @@
 <layman>
-	<overlay type="bzr" name="connectical" contact="aperez@connectical.com"
+	<overlay type="git" name="connectical" contact="aperez@connectical.com"
 		src="git://github.com/Connectical/connectical-overlay.git">
 		<link>https://github.com/Connectical/connectical-overlay</link>
 		<description>
